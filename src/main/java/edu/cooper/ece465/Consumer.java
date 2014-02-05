@@ -4,20 +4,25 @@ import java.util.Random;
 
 public class Consumer implements Runnable {
     private Drop drop;
+    private int seqnum;
 
-    public Consumer(Drop drop) {
+    public Consumer(Drop drop, int seqnum) {
         this.drop = drop;
+        this.seqnum = seqnum;
     }
 
     public void run() {
         Random random = new Random();
-        for (String message = drop.take();
-             ! message.equals("DONE");
+        Data message;
+        for (message = drop.take();
+             ! drop.done();
              message = drop.take()) {
-            System.out.format("MESSAGE RECEIVED: %s%n", message);
+
+            System.out.format("#%d: Received=%d%n", seqnum,message.number);
             try {
                 Thread.sleep(random.nextInt(5000));
-            } catch (InterruptedException e) {}
+            } catch (InterruptedException e) {};
         }
+        drop.put(message);
     }
 }
