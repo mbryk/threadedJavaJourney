@@ -17,7 +17,9 @@ public class Drop {
         while (empty) {
             try {
                 wait();
-            } catch (InterruptedException e) {}
+            } catch (InterruptedException e) {
+                if(done()) return null;
+            }
         }
         // Toggle status.
         empty = true;
@@ -44,10 +46,10 @@ public class Drop {
         notifyAll();
     }
 
-    public void newProducer(){
+    public synchronized void newProducer(){
         producers++;
     }
-    public void doneProducer(){
+    public synchronized void doneProducer(){
         producers--;
     }
 

@@ -5,6 +5,7 @@ import java.util.Random;
 public class Consumer implements Runnable {
     private Drop drop;
     private int seqnum;
+    private int consumed = 0;
 
     public Consumer(Drop drop, int seqnum) {
         this.drop = drop;
@@ -18,11 +19,14 @@ public class Consumer implements Runnable {
              ! drop.done();
              message = drop.take()) {
 
-            System.out.format("#%d: Received=%d%n", seqnum,message.number);
+            if(message==null) break;
+
+            System.out.format("Consumer #%d: Received=%d%n", seqnum,message.number);
+            consumed++;
             try {
                 Thread.sleep(random.nextInt(5000));
             } catch (InterruptedException e) {};
         }
-        drop.put(message);
+        System.out.format("Consumer #%d: Total Consumed=%d%n", seqnum,consumed);
     }
 }

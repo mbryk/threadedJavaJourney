@@ -16,14 +16,15 @@ public class Producer implements Runnable {
 
     public void run() {
         ArrayList<Data> list = new ArrayList<Data>();
-        for(int i = 0; i<listLength-1; list.add(new Data(i++)));
+        for(int i = 0; i<listLength; list.add(new Data(i++)));
 
         Random random = new Random();
 
-        for (int i = 0;
-             i < listLength;
-             i++) {
-            drop.put(list.get(i));
+        for (int j = 0;
+             j < listLength;
+             j++) {
+            drop.put(list.get(j));
+            System.out.format("Producer #%d: Sent=%d%n", seqnum,list.get(j).number);
             try {
                 Thread.sleep(random.nextInt(5000));
             } catch (InterruptedException e) {}
